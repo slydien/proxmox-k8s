@@ -42,9 +42,9 @@ spec:
     - Ingress
   ingress:
     - ports:
-        - port: 80
+        - port: 10080
           protocol: TCP
-        - port: 443
+        - port: 10443
           protocol: TCP
 ---
 # Envoy proxy egress to backends in all namespaces
