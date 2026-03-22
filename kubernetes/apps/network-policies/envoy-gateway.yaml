@@ -1,0 +1,115 @@
+# Default deny-all for envoy-gateway-system namespace
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: envoy-gateway-system
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+# Allow intra-namespace traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-intra-namespace
+  namespace: envoy-gateway-system
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+---
+# Allow external ingress to Envoy proxy (HTTP + HTTPS from anywhere)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-external
+  namespace: envoy-gateway-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: envoy
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - port: 80
+          protocol: TCP
+        - port: 443
+          protocol: TCP
+---
+# Allow DNS egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-dns
+  namespace: envoy-gateway-system
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+---
+# Allow Envoy proxy egress to all backend namespaces
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-backends
+  namespace: envoy-gateway-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: envoy
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - port: 80
+          protocol: TCP
+        - port: 8080
+          protocol: TCP
+        - port: 8443
+          protocol: TCP
+        - port: 3000
+          protocol: TCP
+---
+# Allow Envoy Gateway controller egress to Kubernetes API
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-kube-api
+  namespace: envoy-gateway-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: envoy-gateway
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - port: 6443
+          protocol: TCP
