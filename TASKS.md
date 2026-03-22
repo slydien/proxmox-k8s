@@ -68,11 +68,11 @@
 
 ## Phase 7 — Traefik + cert-manager (via ArgoCD)
 
-- [ ] **7.1** Application ArgoCD : cert-manager (CRDs + controller)
-- [ ] **7.2** Configurer le `ClusterIssuer` Let's Encrypt DNS-01 Cloudflare
-- [ ] **7.3** Application ArgoCD : Traefik v3
-- [ ] **7.4** Configurer IngressRoute ArgoCD avec TLS automatique
-- [ ] **7.5** Vérifier certificat valide sur `argocd.home.slydien.com`
+- [x] **7.1** Installer cert-manager via Helm (bootstrap script)
+- [x] **7.2** ClusterIssuer Let's Encrypt DNS-01 Cloudflare — Ready=True (via ArgoCD)
+- [x] **7.3** Installer Envoy Gateway via Helm OCI (bootstrap script)
+- [x] **7.4** Gateway homelab — Programmed, IP 192.168.1.211 (MetalLB)
+- [x] **7.5** Certificat wildcard `*.home.slydien.com` — Ready=True (Let's Encrypt)
 
 ## Phase 8 — Applications restantes (via ArgoCD)
 
