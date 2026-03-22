@@ -1,20 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root
+  name: envoy-gateway
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/slydien/proxmox-k8s
-    targetRevision: main
-    path: kubernetes/apps
-    directory:
-      recurse: true
-      exclude: "root-app.yaml"
+    repoURL: https://charts.envoyproxy.io
+    chart: gateway-helm
+    targetRevision: v1.4.1
+    helm:
+      valuesObject:
+        deployment:
+          replicas: 1
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: envoy-gateway-system
   syncPolicy:
     automated:
       prune: true

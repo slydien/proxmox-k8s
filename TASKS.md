@@ -61,10 +61,10 @@
 
 ## Phase 6 — ArgoCD
 
-- [ ] **6.1** Installer ArgoCD manuellement (`kubectl apply`)
-- [ ] **6.2** Créer l'Application racine `root-app.yaml` (App of Apps)
-- [ ] **6.3** Configurer la structure `kubernetes/apps/` dans le repo Git
-- [ ] **6.4** Vérifier accès UI ArgoCD (via port-forward dans un premier temps)
+- [x] **6.1** Installer ArgoCD via Helm (LoadBalancer IP 192.168.1.210)
+- [x] **6.2** Créer l'Application racine `root-app.yaml` (App of Apps)
+- [x] **6.3** Configurer la structure `kubernetes/apps/` dans le repo Git
+- [x] **6.4** ArgoCD UI accessible sur http://192.168.1.210
 
 ## Phase 7 — Traefik + cert-manager (via ArgoCD)
 
