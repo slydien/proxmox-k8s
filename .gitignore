@@ -1,0 +1,17 @@
+# Secrets
+.env
+terraform/terraform.tfvars
+terraform/*.tfvars
+
+# Terraform state & cache
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform.lock.hcl
+
+# kubeconfig
+kubernetes/bootstrap/kubeconfig
+kubernetes/bootstrap/*.conf
+
+# OS
+.DS_Store

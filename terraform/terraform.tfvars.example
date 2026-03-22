@@ -1,0 +1,22 @@
+# Copy to terraform.tfvars and fill in your values.
+# terraform.tfvars is gitignored — never commit it.
+
+proxmox_endpoint = "https://YOUR_PROXMOX_IP:8006/"
+proxmox_username = "root@pam"
+proxmox_node     = "pve1"
+proxmox_insecure = true
+
+# SSH — used by the provider to import disk images directly on the node
+proxmox_ssh_host  = "YOUR_PROXMOX_IP"
+proxmox_ssh_user  = "root"
+proxmox_ssh_agent = true   # set to false if not using ssh-agent
+
+storage_pool   = "local-lvm"
+network_bridge = "vmbr0"
+
+gateway     = "192.168.1.254"
+dns_servers = ["192.168.1.254", "8.8.8.8"]
+
+# Leave ubuntu_image_checksum empty to skip verification,
+# or set it to the SHA256 of the image for extra safety.
+ubuntu_image_checksum = ""

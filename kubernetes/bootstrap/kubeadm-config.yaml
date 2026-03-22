@@ -1,0 +1,31 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+nodeRegistration:
+  criSocket: unix:///run/containerd/containerd.sock
+  name: k8s-control-plane
+localAPIEndpoint:
+  advertiseAddress: 192.168.1.209
+  bindPort: 6443
+
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+clusterName: k8s-homelab
+kubernetesVersion: stable
+controlPlaneEndpoint: "192.168.1.209:6443"
+networking:
+  podSubnet: "10.244.0.0/16"       # Cilium default pod CIDR
+  serviceSubnet: "10.96.0.0/12"
+  dnsDomain: "cluster.local"
+
+# Disable kube-proxy — Cilium will replace it via eBPF
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: "ipvs"
+
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
