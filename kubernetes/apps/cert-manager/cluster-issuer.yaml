@@ -1,20 +1,12 @@
-# ClusterIssuer — Let's Encrypt DNS-01 via Cloudflare
-# sync-wave 3 : déployé après cert-manager (wave 1)
-# Prerequisites:
-#   kubectl create secret generic cloudflare-api-token \
-#     --namespace cert-manager \
-#     --from-literal=api-token=<YOUR_CLOUDFLARE_API_TOKEN>
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: contact@slydien.com   # update with your email   # update with your email
+    email: contact@slydien.com
     privateKeySecretRef:
       name: letsencrypt-prod-account-key
     solvers:
@@ -28,12 +20,10 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-staging
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: contact@slydien.com   # update with your email   # update with your email
+    email: contact@slydien.com
     privateKeySecretRef:
       name: letsencrypt-staging-account-key
     solvers:

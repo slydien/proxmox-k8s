@@ -1,13 +1,8 @@
-# GatewayClass + Gateway principal pour tout le trafic HTTPS du cluster.
-# sync-wave 3 : déployé après envoy-gateway (wave 2)
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
   name: envoy
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 ---
@@ -16,9 +11,6 @@ kind: Gateway
 metadata:
   name: homelab
   namespace: envoy-gateway-system
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   gatewayClassName: envoy
   listeners:
@@ -40,15 +32,11 @@ spec:
         namespaces:
           from: All
 ---
-# Wildcard certificate *.home.slydien.com pour tous les services
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: homelab-tls
   namespace: envoy-gateway-system
-  annotations:
-    argocd.argoproj.io/sync-wave: "4"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   secretName: homelab-tls
   issuerRef:
