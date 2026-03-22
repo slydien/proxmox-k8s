@@ -105,11 +105,9 @@ spec:
           protocol: TCP
         - port: 10259
           protocol: TCP
-    # kubelet (10250) and node-exporter (9100) are served on node IPs, not pod IPs
-    - to:
-        - ipBlock:
-            cidr: 192.168.1.0/24
-      ports:
+    # kubelet (10250) and node-exporter (9100) on node host-network IPs
+    # No 'to' restriction needed — Cilium handles ipBlock for hostNetwork differently
+    - ports:
         - port: 9100
           protocol: TCP
         - port: 10250
