@@ -131,25 +131,25 @@ spec:
     - from:
         - namespaceSelector: {}
 ---
-# kube-apiserver (host network, 192.168.1.209) → Longhorn admission webhook (port 9502)
+# kube-apiserver → Longhorn admission webhook (port 9502)
 # Required for Longhorn's ValidatingWebhookConfiguration (validator.longhorn.io)
 # which intercepts PersistentVolumeClaim operations. Without this, PVC creation fails.
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+# Standard NetworkPolicy ipBlock does NOT work here: Cilium classifies kube-apiserver
+# cross-node traffic as 'remote-node' entity, not a CIDR match. CiliumNetworkPolicy needed.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
 metadata:
   name: allow-ingress-kube-apiserver-webhook
   namespace: longhorn-system
 spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
+  endpointSelector: {}
   ingress:
-    - from:
-        - ipBlock:
-            cidr: 192.168.1.209/32
-      ports:
-        - port: 9502
-          protocol: TCP
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "9502"
+              protocol: TCP
 ---
 # Prometheus scrapes Longhorn metrics
 apiVersion: networking.k8s.io/v1
