@@ -33,7 +33,7 @@ singleBinary:
   persistence:
     enabled: true
     storageClass: longhorn
-    size: 6Gi
+    size: 20Gi
 
 # Disable components not used in singleBinary mode
 backend:
