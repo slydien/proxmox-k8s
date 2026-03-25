@@ -43,6 +43,12 @@ read:
 write:
   replicas: 0
 
+# Disable caches — homelab worker nodes have insufficient memory
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
 # Disable built-in MinIO — using filesystem backend on Longhorn PVC
 minio:
   enabled: false

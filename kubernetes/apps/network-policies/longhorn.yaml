@@ -131,6 +131,26 @@ spec:
     - from:
         - namespaceSelector: {}
 ---
+# kube-apiserver (host network, 192.168.1.209) → Longhorn admission webhook (port 9502)
+# Required for Longhorn's ValidatingWebhookConfiguration (validator.longhorn.io)
+# which intercepts PersistentVolumeClaim operations. Without this, PVC creation fails.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-kube-apiserver-webhook
+  namespace: longhorn-system
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 192.168.1.209/32
+      ports:
+        - port: 9502
+          protocol: TCP
+---
 # Prometheus scrapes Longhorn metrics
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
