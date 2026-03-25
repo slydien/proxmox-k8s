@@ -105,6 +105,12 @@ spec:
           protocol: TCP
         - port: 10259
           protocol: TCP
+        - port: 3100
+          protocol: TCP
+        - port: 3200
+          protocol: TCP
+        - port: 8888
+          protocol: TCP
     # kubelet (10250) and node-exporter (9100) on node host-network IPs
     # No 'to' restriction needed — Cilium handles ipBlock for hostNetwork differently
     - ports:
@@ -127,6 +133,34 @@ spec:
         - port: 443
           protocol: TCP
         - port: 6443
+          protocol: TCP
+---
+# Grafana queries Loki (logging ns :3100) and Tempo (tracing ns :3200)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-grafana-loki-tempo
+  namespace: monitoring
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: logging
+      ports:
+        - port: 3100
+          protocol: TCP
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tracing
+      ports:
+        - port: 3200
           protocol: TCP
 ---
 # Grafana plugin downloads and avatar fetching
