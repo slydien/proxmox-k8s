@@ -145,7 +145,7 @@ spec:
   endpointSelector: {}
   ingress:
     - fromEntities:
-        - kube-apiserver
+        - remote-node
       toPorts:
         - ports:
             - port: "9502"
